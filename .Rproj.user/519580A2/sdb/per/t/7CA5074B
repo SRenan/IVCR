@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# This is the user-interface definition of a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\n\nshinyUI(fluidPage(\n\n  titlePanel(\"IV curves\"),\n\n  # Sidebar with a slider input for number of bins\n  sidebarLayout(\n    sidebarPanel(\n      fileInput(\"files\", label = \"Select files\", multiple = T),\n      selectInput(\"samples\", \"Samples\", choices = \"\", multiple = T),\n      actionButton(inputId = \"traceButton\", \"Trace plot\"),\n      hr(),\n      numericInput(inputId = \"capNum\", value = 1e-11, min = 1e-40, max = 1, label = \"Capacitance\"),\n      actionButton(inputId = \"ivButton\", \"IV curve\")\n    ),\n\n    # Show a plot of the generated distribution\n    mainPanel(\n      tabsetPanel(id = \"panels\",\n        tabPanel('summaryPlot',\n                 hr(),\n                 plotOutput(\"summaryPlot\")\n        ),\n        tabPanel('IV curve',\n                 hr(),\n                 plotOutput(\"ivPlot\"),\n                 textOutput(\"RP\")\n        ),\n        tabPanel('Table',\n                 hr(),\n                 dataTableOutput(\"DT\")\n        ),\n        tabPanel('Debug',\n                 hr(),\n                 tags$div(\n                   textInput(\"R_input\", \"Enter an R Command\", ''),\n                   tags$button(id = \"R_send\", type = \"button\", class = \"btn action-button\", \"Submit\",\n                               style = \"margin-bottom: 10px;\")\n                 ),\n                 tags$div(\n                   verbatimTextOutput(\"debug\")\n                 )\n        )\n      )\n    )\n  )\n))\n",
+    "created" : 1506176033387.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4195668268",
+    "id" : "7CA5074B",
+    "lastKnownWriteTime" : 1507075602,
+    "last_content_update" : 1507075602284,
+    "path" : "~/Dropbox/IVCR/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+        "marks" : "<:26,8\n>:27,7"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

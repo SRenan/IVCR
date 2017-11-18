@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(data.table)\nlibrary(ggplot2)\nlibrary(shiny)\n\nsource(\"IVCR.R\")\n\nshinyServer(function(input, output, session) {\n\n  # Select files then populate the sample selector\n  observeEvent(input$files, {\n    files <<- input$files\n    names <- files$name\n    updateSelectInput(session, \"samples\", \"Samples\",\n                      choices = names)\n  })\n  \n  # Read selected file and draw plot\n  observeEvent(input$traceButton, {\n    seldata <<- readfiles(input$files)\n    #selsample <<- input$samples\n    #path <- files[files$name == selsample, \"datapath\"]\n    #seldata <<- fread(path)\n    #setnames(seldata, \"V1\", \"y\")\n    #seldata[, x := 1:2000]\n    #seldata <<- seldata[, sample := selsample]\n  })\n  \n  output$DT <- renderDataTable({\n    input$traceButton\n    isolate({\n      if(input$traceButton > 0){\n        return(seldata)\n      }\n    })\n  })\n  \n  output$summaryPlot <- renderPlot({\n    input$traceButton\n    isolate({\n      if(input$traceButton > 0){\n        p <- makeTracePlot(seldata)\n        p\n        }\n    })\n  })\n  \n  # IV curves\n  observeEvent({\n    input$ivButton\n    },{\n    dat <<- seldata[x > 1000 & x <= 1500]\n    dat[, newx := seq(-100, 100, length.out = 500)]\n    dat[, newy := y/input$capNum]\n    \n    # Fit a 3degree polynomial\n    fitobj <- lm(newy ~ newx + I(newx^2) + I(newx^3), data = dat)\n    sry <- summary(fitobj)\n    \n    coefs <- sry$coefficients[,1]\n    dat[, i := coefs[1]]\n    dat[, a := coefs[2]]\n    dat[, b := coefs[3]]\n    dat[, c := coefs[4]]\n    icepts <- polyroot(coefs)\n    dat[, rev_p := find0(icepts)]\n    dat[, fitted := i + newx*a + newx^2*b + newx^3*c]\n  })\n  output$RP <- renderText({\n    paste0(\"Reverse potential: \", round(unique(dat$rev_p), 4))\n  })\n  \n  output$ivPlot <- renderPlot({\n    input$ivButton\n    isolate({\n      if(input$ivButton > 0){\n        p <- makeIVPlot(dat)\n        p\n      }\n    })\n  })\n  \n  ## DEBUG\n  output$debug <- renderPrint({\n    R_send <- input$R_send\n    if (input$R_send == 0) {\n      return( invisible(NULL) )\n    }\n    isolate({\n      code <- input$R_input\n      result <- eval( parse( text=code ) )\n      return(result)\n    })\n  })\n})\n",
+    "created" : 1506176035750.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3070455820",
+    "id" : "169865F6",
+    "lastKnownWriteTime" : 1507076551,
+    "last_content_update" : 1507076551124,
+    "path" : "~/Dropbox/IVCR/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+        "marks" : "<:51,2\n>:51,50"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\npre_process <- function(data){\n  data[, x := 1:2000]\n  ssdata <- data[x >= 1000 & x < 1500]\n  # data only contains Y (raw read from file)\n  setnames(ssdata, \"V1\", \"y\")\n  ssdata[, newx := seq(-100, 100, length.out = 500)]\n  return(ssdata)\n}\n\n\n",
+    "created" : 1509488517587.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1278920436",
+    "id" : "60E3F145",
+    "lastKnownWriteTime" : 1510097291,
+    "last_content_update" : 1510097291,
+    "path" : "~/Dropbox/IVCR/code.R",
+    "project_path" : "code.R",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
